@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InjectionMachineModule", "InjectionMachineModule.csproj", "{C9470152-ABEF-4445-A0D6-B430F327E6A0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C9470152-ABEF-4445-A0D6-B430F327E6A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9470152-ABEF-4445-A0D6-B430F327E6A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9470152-ABEF-4445-A0D6-B430F327E6A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9470152-ABEF-4445-A0D6-B430F327E6A0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {22081D11-AA87-4584-B5AB-154B07B888F9}
+	EndGlobalSection
+EndGlobal
