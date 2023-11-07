@@ -1,34 +1,25 @@
-﻿using Newtonsoft.Json;
+﻿using InjectionMachineModule.Application.Helpers;
+using InjectionMachineModule.Infrastructure.Communication;
+using Newtonsoft.Json;
 using System.Text;
 
 namespace InjectionMachineModule.Application.Commands.ManufacturingOrders;
 
-public class CreateManufacturingOrderCommandHandler : IRequestHandler<CreateManufacturingOrderCommand, HttpResponseMessage>
+public class CreateManufacturingOrderCommandHandler : IRequestHandler<CreateManufacturingOrderCommand>
 {
-    public APIUrls APIUrls { get; set; }
+    private readonly RestClient _restClient;
+    private readonly MesApiUrlHelper _urlHelper;
 
-    public CreateManufacturingOrderCommandHandler(IOptions<APIUrls> aPIUrls)
+    public CreateManufacturingOrderCommandHandler(RestClient restClient, MesApiUrlHelper urlHelper)
     {
-        APIUrls = aPIUrls.Value;
+        _restClient = restClient;
+        _urlHelper = urlHelper;
     }
 
-    public async Task<HttpResponseMessage> Handle(CreateManufacturingOrderCommand request, CancellationToken cancellationToken)
+    public async Task Handle(CreateManufacturingOrderCommand request, CancellationToken cancellationToken)
     {
-        using (HttpClient httpClient = new HttpClient())
-        {
-            try
-            {
-                var manufacturingOrder = new ManufacturingOrderDto(request.ManufacturingOrderId, request.MaterialDefinitionId, request.Quantity, request.Unit, request.DueDate);
-                
-                string json = JsonConvert.SerializeObject(manufacturingOrder);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                return await httpClient.PostAsync(APIUrls.ManufacturingOrders, content);
-            }
-
-            catch (HttpRequestException ex)
-            {
-                throw new Exception($"Request exception: {ex.Message}");
-            }
-        }
+        var manufacturingOrder = new ManufacturingOrderDto(request.ManufacturingOrderId, request.MaterialDefinitionId, request.Quantity, request.Unit, request.DueDate);
+        var url = _urlHelper.GenerateResourceUrl("ManufacturingOrders");
+        await _restClient.PostAsync(url, manufacturingOrder);
     }
 }

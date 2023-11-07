@@ -1,41 +1,33 @@
-﻿using Newtonsoft.Json;
+﻿using InjectionMachineModule.Application.Helpers;
+using InjectionMachineModule.Infrastructure.Communication;
+using Newtonsoft.Json;
+using System;
 using System.Text;
 
 namespace InjectionMachineModule.Application.Commands.Molds;
-public class CreateMoldCommandHandler : IRequestHandler<CreateMoldCommand, HttpResponseMessage>
+public class CreateMoldCommandHandler : IRequestHandler<CreateMoldCommand>
 {
-    public APIUrls APIUrls { get; set; }
+    private readonly RestClient _restClient;
+    private readonly MesApiUrlHelper _urlHelper;
 
-    public CreateMoldCommandHandler(IOptions<APIUrls> aPIUrls)
+    public CreateMoldCommandHandler(RestClient restClient, MesApiUrlHelper urlHelper)
     {
-        APIUrls = aPIUrls.Value;
+        _restClient = restClient;
+        _urlHelper = urlHelper;
     }
 
-    public async Task<HttpResponseMessage> Handle(CreateMoldCommand request,  CancellationToken cancellationToken)
+    public async Task Handle(CreateMoldCommand request, CancellationToken cancellationToken)
     {
-        using (HttpClient httpClient = new HttpClient())
-        {
-            try
-            {
-                var properties = request.Properties.Select(x => new PropertyDto(
-                    x.PropertyId,
-                    new PropertyType(x.PropertyId).Description,
-                    x.ValueString,
-                    new PropertyType(x.PropertyId).ValueType,
-                    x.ValueUnitOfMeasure))
-                    .ToList();
+        var properties = request.Properties.Select(x => new PropertyDto(
+            x.PropertyId,
+            new PropertyType(x.PropertyId).Description,
+            x.ValueString,
+            new PropertyType(x.PropertyId).ValueType,
+            x.ValueUnitOfMeasure))
+            .ToList();
 
-                var equipment = new EquipmentDto(request.MoldId, request.Name, properties, request.WorkUnit, "MOLD");
-
-                string json = JsonConvert.SerializeObject(equipment);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                return await httpClient.PostAsync(APIUrls.Equipments, content);
-            }
-
-            catch (HttpRequestException ex)
-            {
-                throw new Exception($"Request exception: {ex.Message}");
-            }
-        }
+        var equipment = new EquipmentDto(request.MoldId, request.Name, properties, request.WorkUnit, "MOLD");
+        var url = _urlHelper.GenerateResourceUrl("Equipments");
+        await _restClient.PostAsync(url, equipment);
     }
 }

@@ -1,4 +1,4 @@
-﻿using InjectionMachineModule.Dtos;
+﻿using InjectionMachineModule.Application.Dtos;
 
 namespace InjectionMachineModule.Application.Queries;
 

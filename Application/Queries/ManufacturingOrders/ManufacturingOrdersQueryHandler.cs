@@ -1,50 +1,34 @@
-﻿using Newtonsoft.Json;
+﻿using InjectionMachineModule.Application.Helpers;
+using InjectionMachineModule.Infrastructure.Communication;
+using Newtonsoft.Json;
 
 namespace InjectionMachineModule.Application.Queries.ManufacturingOrders;
 
 public class ManufacturingOrdersQueryHandler : IRequestHandler<ManufacturingOrdersQuery, QueryResult<ManufacturingOrderViewModel>>
 {
-    public APIUrls APIUrls { get; set; }
+    private readonly RestClient _restClient;
+    private readonly MesApiUrlHelper _urlHelper;
 
-    public ManufacturingOrdersQueryHandler(IOptions<APIUrls> aPIUrls)
+    public ManufacturingOrdersQueryHandler(RestClient restClient, MesApiUrlHelper urlHelper)
     {
-        APIUrls = aPIUrls.Value;
+        _restClient = restClient;
+        _urlHelper = urlHelper;
     }
 
     public async Task<QueryResult<ManufacturingOrderViewModel>> Handle(ManufacturingOrdersQuery request, CancellationToken cancellationToken)
     {
-        using (HttpClient httpClient = new HttpClient())
+        var url = _urlHelper.GenerateResourceUrl("ManufacturingOrders") + MesApiUrlHelper.GeneratePageQuery(request.IdStartedWith, request.PageIndex, request.PageSize);
+        var viewModel = await _restClient.GetAsync<QueryResult<ManufacturingOrderViewModel>>(url);
+
+        if (viewModel is null)
+            throw new Exception("Resource not found");
+        else
         {
-            try
-            {
-                var endpoint = APIEndpoint.GetEndpoint(request.IdStartedWith, request.PageIndex, request.PageSize);
-                var response = await httpClient.GetAsync(APIUrls.ManufacturingOrders + endpoint);
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    var viewModel = JsonConvert.DeserializeObject<QueryResult<ManufacturingOrderViewModel>>(content);
+            var items = viewModel.Items;
+            var manufacturingOrders = items.Where(x => x.MaterialDefinition.ModuleType == "InjectionMachine");
+            int totalItems = manufacturingOrders.Count();
 
-                    if (viewModel is null)
-                        throw new Exception("Resourcce not found");
-                    else
-                    {
-                        var items = viewModel.Items;
-                        var manufacturingOrders = items.Where(x => x.MaterialDefinition.ModuleType == "InjectionMachine");
-                        int totalItems = manufacturingOrders.Count();
-
-                        return new QueryResult<ManufacturingOrderViewModel>(manufacturingOrders, totalItems);
-                    }
-                }
-                else
-                {
-                    throw new Exception("API request failed with status code:" + response.StatusCode);
-                }
-            }
-
-            catch (HttpRequestException ex)
-            {
-                throw new Exception($"Request exception: {ex.Message}");
-            }
+            return new QueryResult<ManufacturingOrderViewModel>(manufacturingOrders, totalItems);
         }
     }
 }

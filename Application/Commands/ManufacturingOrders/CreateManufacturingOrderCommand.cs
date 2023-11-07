@@ -3,7 +3,7 @@
 namespace InjectionMachineModule.Application.Commands.ManufacturingOrders;
 
 [DataContract]
-public class CreateManufacturingOrderCommand : IRequest<HttpResponseMessage>
+public class CreateManufacturingOrderCommand : IRequest
 {
     [DataMember]
     public string ManufacturingOrderId { get; set; }

@@ -3,7 +3,7 @@
 namespace InjectionMachineModule.Application.Commands.PlasticProduct;
 
 [DataContract]
-public class CreatePlasticProductCommand : IRequest<HttpResponseMessage>
+public class CreatePlasticProductCommand : IRequest
 {
     [DataMember]
     public string MaterialDefinitionId { get; set; }

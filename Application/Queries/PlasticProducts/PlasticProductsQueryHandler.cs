@@ -1,51 +1,36 @@
-﻿using InjectionMachineModule.Application.Queries.PlasticInjectionMachines;
+﻿using InjectionMachineModule.Application.Helpers;
+using InjectionMachineModule.Application.Queries.ManufacturingOrders;
+using InjectionMachineModule.Application.Queries.PlasticInjectionMachines;
+using InjectionMachineModule.Infrastructure.Communication;
 using Newtonsoft.Json;
 
 namespace InjectionMachineModule.Application.Queries.PlasticProducts;
 
 public class PlasticProductsQueryHandler : IRequestHandler<PlasticProductsQuery, QueryResult<PlasticProductViewModel>>
 {
-    public APIUrls APIUrls { get; set; }
+    private readonly RestClient _restClient;
+    private readonly MesApiUrlHelper _urlHelper;
 
-    public PlasticProductsQueryHandler(IOptions<APIUrls> aPIUrls)
+    public PlasticProductsQueryHandler(RestClient restClient, MesApiUrlHelper urlHelper)
     {
-        APIUrls = aPIUrls.Value;
+        _restClient = restClient;
+        _urlHelper = urlHelper;
     }
 
     public async Task<QueryResult<PlasticProductViewModel>> Handle(PlasticProductsQuery request, CancellationToken cancellationToken)
     {
-        using (HttpClient httpClient = new HttpClient())
+        var url = _urlHelper.GenerateResourceUrl("ManufacturingOrders") + MesApiUrlHelper.GeneratePageQuery(request.IdStartedWith, request.PageIndex, request.PageSize);
+        var viewModel = await _restClient.GetAsync<QueryResult<PlasticProductViewModel>>(url);
+
+        if (viewModel is null)
+            throw new Exception("Resource not found");
+        else
         {
-            try
-            {
-                var endpoint = APIEndpoint.GetEndpoint(request.IdStartedWith, request.PageIndex, request.PageSize);
-                var response = await httpClient.GetAsync(APIUrls.MaterialDefinitions + endpoint);
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    var viewModel = JsonConvert.DeserializeObject<QueryResult<PlasticProductViewModel>>(content);
+            var items = viewModel.Items;
+            var plasticProducts = items.Where(x => x.ModuleType == "InjectionMachine");
+            int totalItems = plasticProducts.Count();
 
-                    if (viewModel is null)
-                        throw new Exception("Resourcce not found");
-                    else
-                    {
-                        var items = viewModel.Items;
-                        var plasticProducts = items.Where(x => x.ModuleType == "InjectionMachine");
-                        int totalItems = plasticProducts.Count();
-
-                        return new QueryResult<PlasticProductViewModel>(plasticProducts, totalItems);
-                    }
-                }
-                else
-                {
-                    throw new Exception("API request failed with status code:" + response.StatusCode);
-                }
-            }
-
-            catch (HttpRequestException ex)
-            {
-                throw new Exception($"Request exception: {ex.Message}");
-            }
+            return new QueryResult<PlasticProductViewModel>(plasticProducts, totalItems);
         }
     }
 }

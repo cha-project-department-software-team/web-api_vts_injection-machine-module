@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace InjectionMachineModule.Dtos.ManufacturingOrders;
+namespace InjectionMachineModule.Application.Dtos.ManufacturingOrders;
 
 public class ManufacturingOrderDto
 {

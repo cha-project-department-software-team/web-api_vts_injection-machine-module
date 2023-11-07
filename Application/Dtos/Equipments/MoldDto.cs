@@ -1,4 +1,6 @@
-﻿namespace InjectionMachineModule.Dtos.Equipments;
+﻿using InjectionMachineModule.Application.Dtos;
+
+namespace InjectionMachineModule.Application.Dtos.Equipments;
 
 public class MoldDto
 {

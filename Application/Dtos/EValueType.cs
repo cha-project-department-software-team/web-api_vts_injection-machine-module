@@ -1,4 +1,4 @@
-﻿namespace InjectionMachineModule.Dtos;
+﻿namespace InjectionMachineModule.Application.Dtos;
 public enum EValueType
 {
     Boolean = 0,

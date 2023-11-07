@@ -3,7 +3,7 @@
 namespace InjectionMachineModule.Application.Commands.PlasticInjectionMachines;
 
 [DataContract]
-public class CreatePlasticInjectionMachineCommand : IRequest<HttpResponseMessage>
+public class CreatePlasticInjectionMachineCommand : IRequest
 {
     [DataMember]
     public string EquipmentId { get; set; }

@@ -1,5 +1,6 @@
+using InjectionMachineModule.Application.Helpers;
 using InjectionMachineModule.Application.Queries;
-using InjectionMachineModule.Communication;
+using InjectionMachineModule.Infrastructure.Communication;
 using InjectionMachineModule.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,8 +31,9 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssemblyContaining<ModelToViewModelProfile>();
 });
 
-var config = builder.Configuration;
-builder.Services.Configure<APIUrls>(config.GetSection("APIUrls"));
+builder.Services.AddSingleton<RestClient>();
+builder.Services.AddSingleton<MesApiUrlHelper>();
+builder.Services.AddSingleton(new HttpClient());
 
 var app = builder.Build();
 

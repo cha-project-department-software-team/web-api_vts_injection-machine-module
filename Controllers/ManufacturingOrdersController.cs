@@ -19,13 +19,9 @@ public class ManufacturingOrdersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateManufacturingOrder([FromBody] CreateManufacturingOrderCommand command)
     {
-        var response = await _mediator.Send(command);
-        string responseData = await response.Content.ReadAsStringAsync();
+        await _mediator.Send(command);
 
-        if (!response.IsSuccessStatusCode)
-            return BadRequest(responseData);
-
-        return Ok(responseData);
+        return Ok();
     }
 
     [HttpGet]

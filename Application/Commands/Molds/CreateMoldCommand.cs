@@ -2,7 +2,7 @@
 
 namespace InjectionMachineModule.Application.Commands.Molds;
 [DataContract]
-public class CreateMoldCommand : IRequest<HttpResponseMessage>
+public class CreateMoldCommand : IRequest
 {
     [DataMember]
     public string MoldId { get; set; }

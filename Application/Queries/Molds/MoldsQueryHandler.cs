@@ -1,54 +1,40 @@
 ﻿using AutoMapper;
-using InjectionMachineModule.Dtos.Equipments;
+using InjectionMachineModule.Application.Dtos.Equipments;
+using InjectionMachineModule.Application.Helpers;
+using InjectionMachineModule.Infrastructure.Communication;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Newtonsoft.Json;
 
 namespace InjectionMachineModule.Application.Queries.Molds;
 
 public class MoldsQueryHandler : IRequestHandler<MoldsQuery, QueryResult<MoldViewModel>>
 {
-    public APIUrls APIUrls { get; set; }
+    private readonly RestClient _restClient;
+    private readonly MesApiUrlHelper _urlHelper;
     private readonly IMapper _mapper;
-    public MoldsQueryHandler(IOptions<APIUrls> aPIUrls, IMapper mapper)
+
+    public MoldsQueryHandler(RestClient restClient, MesApiUrlHelper urlHelper, IMapper mapper)
     {
-        APIUrls = aPIUrls.Value;
+        _restClient = restClient;
+        _urlHelper = urlHelper;
         _mapper = mapper;
     }
 
     public async Task<QueryResult<MoldViewModel>> Handle(MoldsQuery request, CancellationToken cancellationToken)
     {
-        using (HttpClient httpClient = new HttpClient())
+        var url = _urlHelper.GenerateResourceUrl("Equipments") + MesApiUrlHelper.GeneratePageQuery(request.IdStartedWith, request.PageIndex, request.PageSize);
+        var viewModel = await _restClient.GetAsync<QueryResult<EquipmentDto>>(url);
+
+        if (viewModel is null)
+            throw new Exception("Resourcce not found");
+        else
         {
-            try
-            {
-                var endpoint = APIEndpoint.GetEndpoint(request.IdStartedWith, request.PageIndex, request.PageSize);
-                var response = await httpClient.GetAsync(APIUrls.Equipments + endpoint);
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    var viewModel = JsonConvert.DeserializeObject<QueryResult<EquipmentDto>>(content);
+            var items = viewModel.Items;
+            items = items.Where(x => x.EquipmentClass == "MOLD");
+            var molds = _mapper.Map<IEnumerable<MoldViewModel>>(items);
+            int totalItems = molds.Count();
 
-                    if (viewModel is null)
-                        throw new Exception("Resourcce not found");
-                    else
-                    {
-                        var items = viewModel.Items;
-                        items = items.Where(x => x.EquipmentClass == "MOLD");
-                        var molds = _mapper.Map<IEnumerable<MoldViewModel>>(items);
-                        int totalItems = molds.Count();
-
-                        return new QueryResult<MoldViewModel>(molds, totalItems);
-                    }
-                }
-                else
-                {
-                    throw new Exception("API request failed with status code:" + response.StatusCode);
-                }
-            }
-
-            catch (HttpRequestException ex)
-            {
-                throw new Exception($"Request exception: {ex.Message}");
-            }
+            return new QueryResult<MoldViewModel>(molds, totalItems);
         }
     }
 }

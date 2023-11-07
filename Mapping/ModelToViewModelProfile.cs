@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
+using InjectionMachineModule.Application.Dtos;
+using InjectionMachineModule.Application.Dtos.Equipments;
 using InjectionMachineModule.Application.Queries;
 using InjectionMachineModule.Application.Queries.Molds;
 using InjectionMachineModule.Application.Queries.PlasticInjectionMachines;
-using InjectionMachineModule.Dtos.Equipments;
 
 namespace InjectionMachineModule.Mapping;
 

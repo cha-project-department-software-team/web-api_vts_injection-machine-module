@@ -1,4 +1,4 @@
-﻿namespace InjectionMachineModule.Dtos.MaterialDefinitions;
+﻿namespace InjectionMachineModule.Application.Dtos.MaterialDefinitions;
 
 public class OperationDto
 {

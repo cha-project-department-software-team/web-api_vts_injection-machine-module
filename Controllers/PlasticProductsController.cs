@@ -18,13 +18,9 @@ public class PlasticProductsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreatePlasticProduct([FromBody] CreatePlasticProductCommand command)
     {
-        var response = await _mediator.Send(command);
-        string responseData = await response.Content.ReadAsStringAsync();
+        await _mediator.Send(command);
 
-        if (!response.IsSuccessStatusCode)
-            return BadRequest(responseData);
-
-        return Ok(responseData);
+        return Ok();
     }
 
     [HttpGet]
