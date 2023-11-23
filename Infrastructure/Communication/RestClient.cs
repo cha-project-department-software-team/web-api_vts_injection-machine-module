@@ -24,7 +24,7 @@ public class RestClient
         catch
         {
             var message = await result.Content.ReadAsStringAsync();
-            Console.WriteLine(message);
+            throw new HttpRequestException(message);
         }
     }
 
@@ -54,7 +54,7 @@ public class RestClient
         catch
         {
             var message = await result.Content.ReadAsStringAsync();
-            Console.WriteLine(message);
+            throw new HttpRequestException(message);
         }
     }
 }

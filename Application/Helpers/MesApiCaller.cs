@@ -1,6 +1,4 @@
-﻿using InjectionMachineModule.Infrastructure.Communication;
-
-namespace InjectionMachineModule.Application.Helpers;
+﻿namespace InjectionMachineModule.Application.Helpers;
 
 public class MesApiUrlHelper
 {

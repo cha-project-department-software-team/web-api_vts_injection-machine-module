@@ -23,10 +23,10 @@ public class MoldsQueryHandler : IRequestHandler<MoldsQuery, QueryResult<MoldVie
     public async Task<QueryResult<MoldViewModel>> Handle(MoldsQuery request, CancellationToken cancellationToken)
     {
         var url = _urlHelper.GenerateResourceUrl("Equipments") + MesApiUrlHelper.GeneratePageQuery(request.IdStartedWith, request.PageIndex, request.PageSize);
-        var viewModel = await _restClient.GetAsync<QueryResult<EquipmentDto>>(url);
+        var viewModel = await _restClient.GetAsync<QueryResult<EquipmentViewModelDto>>(url);
 
         if (viewModel is null)
-            throw new Exception("Resourcce not found");
+            throw new HttpRequestException("Resourcce not found");
         else
         {
             var items = viewModel.Items;

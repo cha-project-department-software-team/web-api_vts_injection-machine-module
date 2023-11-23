@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
-using InjectionMachineModule.Application.Dtos.Equipments;
 using InjectionMachineModule.Application.Helpers;
-using InjectionMachineModule.Infrastructure.Communication;
-using Newtonsoft.Json;
 
 namespace InjectionMachineModule.Application.Queries.PlasticInjectionMachines;
 
@@ -22,10 +19,10 @@ public class PlasticInjectionMachinesQueryHandler : IRequestHandler<PlasticInjec
     public async Task<QueryResult<PlasticInjectionMachineViewModel>> Handle(PlasticInjectionMachinesQuery request, CancellationToken cancellationToken)
     {
         var url = _urlHelper.GenerateResourceUrl("Equipments") + MesApiUrlHelper.GeneratePageQuery(request.IdStartedWith, request.PageIndex, request.PageSize);
-        var viewModel = await _restClient.GetAsync<QueryResult<EquipmentDto>>(url);
+        var viewModel = await _restClient.GetAsync<QueryResult<EquipmentViewModelDto>>(url);
 
         if (viewModel is null)
-            throw new Exception("Resourcce not found");
+            throw new HttpRequestException("Resourcce not found");
         else
         {
             var items = viewModel.Items;

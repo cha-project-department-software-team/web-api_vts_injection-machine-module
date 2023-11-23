@@ -1,13 +1,13 @@
 ﻿namespace InjectionMachineModule.Application.Dtos.MaterialDefinitions;
 
-public class OperationDto
+public class CreateOperationDto
 {
     public string OperationId { get; set; }
     public string Name { get; set; }
     public TimeSpan Duration { get; set; }
     public List<string> PrerequisiteOperation { get; set; } = new List<string>();
 
-    public OperationDto()
+    public CreateOperationDto()
     {
         int year = DateTime.Now.Year;
         int month = DateTime.Now.Month;

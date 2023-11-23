@@ -1,7 +1,5 @@
-﻿using InjectionMachineModule.Application.Helpers;
-using InjectionMachineModule.Infrastructure.Communication;
-using Newtonsoft.Json;
-using System.Text;
+﻿using InjectionMachineModule.Application.Dtos.ResourceNetworkConnections;
+using InjectionMachineModule.Application.Helpers;
 
 namespace InjectionMachineModule.Application.Commands.PlasticProduct;
 
@@ -26,8 +24,38 @@ public class CreatePlasticProductCommandHandler : IRequestHandler<CreatePlasticP
             x.ValueUnitOfMeasure))
             .ToList();
 
-        var materialDefinition = new MaterialDefinitionDto(request.MaterialDefinitionId, request.Name, request.PrimaryUnit, request.ModuleType, properties);
+        var materialDefinition = new CreateMaterialDefinitionDto(request.PlasticProductId, request.Name, request.PrimaryUnit, request.ModuleType, properties);
         var url = _urlHelper.GenerateResourceUrl("MaterialDefinitions");
         await _restClient.PostAsync(url, materialDefinition);
+
+        var operation = new CreateOperationDto();
+        var operationUrl = _urlHelper.GenerateResourceUrl($"MaterialDefinitions/{request.PlasticProductId}/operations");
+        await _restClient.PostAsync(operationUrl, operation);
+
+        foreach (var moldId in request.Molds)
+        {
+            var connection = new ResourceNetworkConnectionDto(
+                Guid.NewGuid().ToString(),
+                $"{request.PlasticProductId} is formed from {moldId}",
+                request.PlasticProductId,
+                moldId);
+
+            var connectionUrl = _urlHelper.GenerateResourceUrl("ResourceRelationshipNetworks/PlasticProductMoldRelationshipId/Connections");
+
+            await _restClient.PostAsync(connectionUrl, connection);
+        }
+
+        foreach (var plasticMaterialId in request.PlasticMaterials)
+        {
+            var connection = new ResourceNetworkConnectionDto(
+                Guid.NewGuid().ToString(),
+                $"{request.PlasticProductId} is made from {plasticMaterialId}",
+                request.PlasticProductId,
+                plasticMaterialId);
+
+            var connectionUrl = _urlHelper.GenerateResourceUrl("ResourceRelationshipNetworks/ProductMaterialRelationshipId/Connections");
+
+            await _restClient.PostAsync(connectionUrl, connection);
+        }
     }
 }

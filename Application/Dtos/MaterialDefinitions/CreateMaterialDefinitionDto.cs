@@ -1,8 +1,6 @@
-﻿using InjectionMachineModule.Application.Dtos;
+﻿namespace InjectionMachineModule.Application.Dtos.MaterialDefinitions;
 
-namespace InjectionMachineModule.Application.Dtos.MaterialDefinitions;
-
-public class MaterialDefinitionDto
+public class CreateMaterialDefinitionDto
 {
     public string MaterialDefinitionId { get; set; }
     public string Name { get; set; }
@@ -10,7 +8,7 @@ public class MaterialDefinitionDto
     public string ModuleType { get; set; }
     public List<PropertyDto> Properties { get; set; }
 
-    public MaterialDefinitionDto(string materialDefinitionId, string name, string primaryUnit, string moduleType, List<PropertyDto> properties)
+    public CreateMaterialDefinitionDto(string materialDefinitionId, string name, string primaryUnit, string moduleType, List<PropertyDto> properties)
     {
         MaterialDefinitionId = materialDefinitionId;
         Name = name;

@@ -1,8 +1,6 @@
-﻿using System.Runtime.Serialization;
+﻿namespace InjectionMachineModule.Application.Dtos.ManufacturingOrders;
 
-namespace InjectionMachineModule.Application.Dtos.ManufacturingOrders;
-
-public class ManufacturingOrderDto
+public class CreateManufacturingOrderDto
 {
     public string ManufacturingOrderId { get; set; }
     public string MaterialDefinitionId { get; set; }
@@ -10,7 +8,7 @@ public class ManufacturingOrderDto
     public string Unit { get; set; }
     public DateTime DueDate { get; set; }
 
-    public ManufacturingOrderDto(string manufacturingOrderId, string materialDefinitionId, decimal quantity, string unit, DateTime dueDate)
+    public CreateManufacturingOrderDto(string manufacturingOrderId, string materialDefinitionId, decimal quantity, string unit, DateTime dueDate)
     {
         ManufacturingOrderId = manufacturingOrderId;
         MaterialDefinitionId = materialDefinitionId;

@@ -14,7 +14,7 @@ public class PropertyType
         }
         else
         {
-            throw new Exception("You type wrong Description");
+            throw new Exception("You type wrong PropertyId");
         }
     }
 }

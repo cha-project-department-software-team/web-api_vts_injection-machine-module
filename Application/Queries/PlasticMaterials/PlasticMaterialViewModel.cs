@@ -1,8 +1,10 @@
-﻿namespace InjectionMachineModule.Application.Queries.PlasticProducts;
+﻿using InjectionMachineModule.Application.Queries.PlasticProducts;
 
-public class PlasticProductViewModel
+namespace InjectionMachineModule.Application.Queries.PlasticMaterials;
+
+public class PlasticMaterialViewModel
 {
-    public string PlasticProductId { get; set; }
+    public string PlasticMaterialId { get; set; }
     public string Name { get; set; }
     public string PrimaryUnit { get; set; }
     public string ModuleType { get; set; }
@@ -11,12 +13,12 @@ public class PlasticProductViewModel
     public List<OperationViewModel> Operations { get; set; }
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    private PlasticProductViewModel() { }
+    private PlasticMaterialViewModel() { }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-    public PlasticProductViewModel(string plasticProductId, string name, string primaryUnit, string moduleType, List<PropertyViewModel> properties, List<MaterialUnitViewModel> secondaryUnits, List<OperationViewModel> operations)
+    public PlasticMaterialViewModel(string plasticMaterialId, string name, string primaryUnit, string moduleType, List<PropertyViewModel> properties, List<MaterialUnitViewModel> secondaryUnits, List<OperationViewModel> operations)
     {
-        PlasticProductId = plasticProductId;
+        PlasticMaterialId = plasticMaterialId;
         Name = name;
         PrimaryUnit = primaryUnit;
         ModuleType = moduleType;

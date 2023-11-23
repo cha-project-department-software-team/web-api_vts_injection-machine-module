@@ -1,9 +1,9 @@
 ﻿using System.Runtime.Serialization;
 
-namespace InjectionMachineModule.Application.Commands.PlasticInjectionMachines;
+namespace InjectionMachineModule.Application.Commands;
 
 [DataContract]
-public class SavePlasticInjectionPropertyViewModel
+public class SavePropertyViewModel
 {
     [DataMember]
     public string PropertyId { get; set; }
@@ -12,7 +12,7 @@ public class SavePlasticInjectionPropertyViewModel
     [DataMember]
     public string ValueUnitOfMeasure { get; set; }
 
-    public SavePlasticInjectionPropertyViewModel(string propertyId, string valueString, string valueUnitOfMeasure)
+    public SavePropertyViewModel(string propertyId, string valueString, string valueUnitOfMeasure)
     {
         PropertyId = propertyId;
         ValueString = valueString;

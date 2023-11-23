@@ -9,13 +9,13 @@ public class CreateMoldCommand : IRequest
     [DataMember]
     public string Name { get; set; }
     [DataMember]
-    public List<SaveMoldPropertyViewModel> Properties { get; set; }
+    public List<SavePropertyViewModel> Properties { get; set; }
     [DataMember]
     public List<string> PlasticInjectionMachines { get; set; }
     [DataMember]
     public string WorkUnit { get; set; }
 
-    public CreateMoldCommand(string moldId, string name, List<SaveMoldPropertyViewModel> properties, List<string> plasticInjectionMachines, string workUnit)
+    public CreateMoldCommand(string moldId, string name, List<SavePropertyViewModel> properties, List<string> plasticInjectionMachines, string workUnit)
     {
         MoldId = moldId;
         Name = name;

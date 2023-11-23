@@ -1,7 +1,5 @@
-﻿using InjectionMachineModule.Application.Helpers;
-using InjectionMachineModule.Infrastructure.Communication;
-using Newtonsoft.Json;
-using System.Text;
+﻿using InjectionMachineModule.Application.Dtos.ResourceNetworkConnections;
+using InjectionMachineModule.Application.Helpers;
 
 namespace InjectionMachineModule.Application.Commands.PlasticInjectionMachines;
 
@@ -26,9 +24,22 @@ public class CreatePlasticInjectionMachineCommandHandler : IRequestHandler<Creat
             x.ValueUnitOfMeasure))
             .ToList();
 
-        var equipment = new EquipmentDto(request.EquipmentId, request.Name, properties, request.WorkUnit, "IM");
+        var equipment = new CreateEquipmentDto(request.EquipmentId, request.Name, properties, request.WorkUnit, "IM");
 
         var url = _urlHelper.GenerateResourceUrl("Equipments");
         await _restClient.PostAsync(url, equipment);
+
+        foreach (var moldId in request.Molds)
+        {
+            var connection = new ResourceNetworkConnectionDto(
+                Guid.NewGuid().ToString(),
+                $"Relationship between {request.EquipmentId} and {moldId}",
+                request.EquipmentId,
+                moldId);
+
+            var connectionUrl = _urlHelper.GenerateResourceUrl("ResourceRelationshipNetworks/MachineMoldRelationshipId/Connections");
+
+            await _restClient.PostAsync(connectionUrl, connection);
+        }
     }
 }

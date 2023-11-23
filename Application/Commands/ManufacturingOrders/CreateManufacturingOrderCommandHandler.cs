@@ -1,7 +1,4 @@
 ﻿using InjectionMachineModule.Application.Helpers;
-using InjectionMachineModule.Infrastructure.Communication;
-using Newtonsoft.Json;
-using System.Text;
 
 namespace InjectionMachineModule.Application.Commands.ManufacturingOrders;
 
@@ -18,7 +15,7 @@ public class CreateManufacturingOrderCommandHandler : IRequestHandler<CreateManu
 
     public async Task Handle(CreateManufacturingOrderCommand request, CancellationToken cancellationToken)
     {
-        var manufacturingOrder = new ManufacturingOrderDto(request.ManufacturingOrderId, request.MaterialDefinitionId, request.Quantity, request.Unit, request.DueDate);
+        var manufacturingOrder = new CreateManufacturingOrderDto(request.ManufacturingOrderId, request.MaterialDefinitionId, request.Quantity, request.Unit, request.DueDate);
         var url = _urlHelper.GenerateResourceUrl("ManufacturingOrders");
         await _restClient.PostAsync(url, manufacturingOrder);
     }
