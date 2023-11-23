@@ -23,9 +23,29 @@ public class PlasticInjectionMachinesController : ControllerBase
         return Ok();
     }
 
+    [HttpPut]
+    [Route("{equipmentId}")]
+    public async Task<IActionResult> UpdatePlasticInjectionMachine([FromRoute]string equipmentId, [FromBody]UpdatePlasticInjectionMachineViewModel equipment)
+    {
+        var command = new UpdatePlasticInjectionMachineCommand(equipmentId, equipment.Name, equipment.Properties, equipment.Molds, equipment.WorkUnit);
+        await _mediator.Send(command);
+
+        return Ok();
+    }
+
     [HttpGet]
     public async Task<QueryResult<PlasticInjectionMachineViewModel>> GetPlasticInjectionMachine([FromQuery] PlasticInjectionMachinesQuery query)
     {
         return await _mediator.Send(query);
+    }
+
+    [HttpDelete]
+    [Route("{equipmentId}")]
+    public async Task<IActionResult> DeletePlasticInjectionMachine([FromRoute] string equipmentId)
+    {
+        var command = new DeletePlasticInjectionMachineCommand(equipmentId);
+        await _mediator.Send(command);
+
+        return Ok();
     }
 }

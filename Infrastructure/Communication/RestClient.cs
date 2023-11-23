@@ -42,11 +42,41 @@ public class RestClient
         return default;
     }
 
+    public async Task PutAsync<T>(string url, T data)
+    {
+        var json = JsonConvert.SerializeObject(data);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var result = await _httpClient.PutAsync(url, content);
+        try
+        {
+            result.EnsureSuccessStatusCode();
+        }
+        catch
+        {
+            var message = await result.Content.ReadAsStringAsync();
+            throw new HttpRequestException(message);
+        }
+    }
+
     public async Task PatchAsync<T>(string url, T data)
     {
         var json = JsonConvert.SerializeObject(data);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
         var result = await _httpClient.PatchAsync(url, content);
+        try
+        {
+            result.EnsureSuccessStatusCode();
+        }
+        catch
+        {
+            var message = await result.Content.ReadAsStringAsync();
+            throw new HttpRequestException(message);
+        }
+    }
+
+    public async Task DeleteAsync(string url)
+    {
+        var result = await _httpClient.DeleteAsync(url);
         try
         {
             result.EnsureSuccessStatusCode();
