@@ -5,10 +5,10 @@ public class ResourceConnectionDto
     public string ConnectionId { get; set; }
     public string Description { get; set; }
     public List<PropertyDto> Properties { get; set; }
-    public string FromResource { get; set; }
-    public string ToResource { get; set; }
+    public ConnectedResourceDto FromResource { get; set; }
+    public ConnectedResourceDto ToResource { get; set; }
 
-    public ResourceConnectionDto(string connectionId, string description, string fromResource, string toResource)
+    public ResourceConnectionDto(string connectionId, string description, ConnectedResourceDto fromResource, ConnectedResourceDto toResource)
     {
         ConnectionId = connectionId;
         Description = description;
