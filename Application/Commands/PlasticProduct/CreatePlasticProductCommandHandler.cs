@@ -34,7 +34,7 @@ public class CreatePlasticProductCommandHandler : IRequestHandler<CreatePlasticP
 
         foreach (var moldId in request.Molds)
         {
-            var connection = new ResourceNetworkConnectionDto(
+            var connection = new SaveResourceNetworkConnectionDto(
                 Guid.NewGuid().ToString(),
                 $"{request.PlasticProductId} is formed from {moldId}",
                 request.PlasticProductId,
@@ -47,7 +47,7 @@ public class CreatePlasticProductCommandHandler : IRequestHandler<CreatePlasticP
 
         foreach (var plasticMaterialId in request.PlasticMaterials)
         {
-            var connection = new ResourceNetworkConnectionDto(
+            var connection = new SaveResourceNetworkConnectionDto(
                 Guid.NewGuid().ToString(),
                 $"{request.PlasticProductId} is made from {plasticMaterialId}",
                 request.PlasticProductId,

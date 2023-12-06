@@ -29,7 +29,7 @@ public class CreateMoldCommandHandler : IRequestHandler<CreateMoldCommand>
 
         foreach (var machineId in request.PlasticInjectionMachines)
         {
-            var connection = new ResourceNetworkConnectionDto(
+            var connection = new SaveResourceNetworkConnectionDto(
                 Guid.NewGuid().ToString(),
                 $"Relationship between {machineId} and {request.MoldId}",
                 machineId,

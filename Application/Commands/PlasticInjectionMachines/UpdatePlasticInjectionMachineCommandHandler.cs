@@ -34,7 +34,7 @@ public class UpdatePlasticInjectionMachineCommandHandler : IRequestHandler<Updat
 
         foreach (var moldId in request.Molds)
         {
-            var connection = new ResourceNetworkConnectionDto(
+            var connection = new SaveResourceNetworkConnectionDto(
                 Guid.NewGuid().ToString(),
                 $"Relationship between {request.EquipmentId} and {moldId}",
                 request.EquipmentId,

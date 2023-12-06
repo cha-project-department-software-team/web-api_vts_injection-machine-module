@@ -1,6 +1,6 @@
 ﻿namespace InjectionMachineModule.Application.Dtos.ResourceNetworkConnections;
 
-public class ResourceNetworkConnectionDto
+public class ResourceConnectionDto
 {
     public string ConnectionId { get; set; }
     public string Description { get; set; }
@@ -8,7 +8,7 @@ public class ResourceNetworkConnectionDto
     public string FromResource { get; set; }
     public string ToResource { get; set; }
 
-    public ResourceNetworkConnectionDto(string connectionId, string description, string fromResource, string toResource)
+    public ResourceConnectionDto(string connectionId, string description, string fromResource, string toResource)
     {
         ConnectionId = connectionId;
         Description = description;
