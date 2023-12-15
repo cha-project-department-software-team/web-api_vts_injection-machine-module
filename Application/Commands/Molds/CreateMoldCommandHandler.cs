@@ -23,6 +23,8 @@ public class CreateMoldCommandHandler : IRequestHandler<CreateMoldCommand>
             x.ValueUnitOfMeasure))
             .ToList();
 
+        properties.Add(new PropertyDto("Cycle", "InjectionCycle", request.CycleBySecond.ToString(), EValueType.Decimal, "Second"));
+
         var equipment = new CreateEquipmentDto(request.MoldId, request.Name, properties, request.WorkUnit, "MOLD");
         var url = _urlHelper.GenerateResourceUrl("Equipments");
         await _restClient.PostAsync(url, equipment);

@@ -14,13 +14,16 @@ public class CreateMoldCommand : IRequest
     public List<string> PlasticInjectionMachines { get; set; }
     [DataMember]
     public string WorkUnit { get; set; }
+    [DataMember]
+    public decimal CycleBySecond { get; set; }
 
-    public CreateMoldCommand(string moldId, string name, List<SavePropertyViewModel> properties, List<string> plasticInjectionMachines, string workUnit)
+    public CreateMoldCommand(string moldId, string name, List<SavePropertyViewModel> properties, List<string> plasticInjectionMachines, string workUnit, decimal cycleBySecond)
     {
         MoldId = moldId;
         Name = name;
         Properties = properties;
         PlasticInjectionMachines = plasticInjectionMachines;
         WorkUnit = workUnit;
+        CycleBySecond = cycleBySecond;
     }
 }

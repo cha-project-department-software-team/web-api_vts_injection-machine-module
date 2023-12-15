@@ -24,7 +24,7 @@ public class RestClient
         catch
         {
             var message = await result.Content.ReadAsStringAsync();
-            throw new HttpRequestException(message);
+            throw new HttpRequestException($"{result.StatusCode}: {message}");
         }
     }
 

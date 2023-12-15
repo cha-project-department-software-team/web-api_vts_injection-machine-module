@@ -23,7 +23,7 @@ public class ModelToViewModelProfile : Profile
         CreateMap<OperationViewModelDto, OperationViewModel>();
         CreateMap<MaterialUnitViewModelDto, MaterialUnitViewModel>();
 
-        CreateMap<ManufacturingOrderViewModelDto, ManufacturingOrderViewModel>();
+        CreateMap<ManufacturingOrderDto, ManufacturingOrderViewModel>();
 
         CreateMap<PropertyDto, PropertyViewModel>();
 

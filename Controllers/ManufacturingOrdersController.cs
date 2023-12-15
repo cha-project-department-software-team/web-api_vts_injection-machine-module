@@ -29,4 +29,11 @@ public class ManufacturingOrdersController : ControllerBase
     {
         return await _mediator.Send(query);
     }
+
+    [HttpPost]
+    [Route("workorders/schedule")]
+    public async Task<IActionResult> ScheduleWorkOrder(ScheduleWorkOrdersCommand command)
+    {
+        return Ok(await _mediator.Send(command));
+    }
 }

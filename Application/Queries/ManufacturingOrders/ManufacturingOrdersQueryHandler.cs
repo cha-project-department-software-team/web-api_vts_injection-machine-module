@@ -19,7 +19,7 @@ public class ManufacturingOrdersQueryHandler : IRequestHandler<ManufacturingOrde
     public async Task<QueryResult<ManufacturingOrderViewModel>> Handle(ManufacturingOrdersQuery request, CancellationToken cancellationToken)
     {
         var url = _urlHelper.GenerateResourceUrl("ManufacturingOrders") + MesApiUrlHelper.GeneratePageQuery(request.IdStartedWith, request.PageIndex, request.PageSize);
-        var viewModel = await _restClient.GetAsync<QueryResult<ManufacturingOrderViewModelDto>>(url);
+        var viewModel = await _restClient.GetAsync<QueryResult<ManufacturingOrderDto>>(url);
 
         if (viewModel is null)
             throw new HttpRequestException("Resource not found");

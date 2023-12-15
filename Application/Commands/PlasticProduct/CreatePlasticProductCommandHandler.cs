@@ -28,7 +28,7 @@ public class CreatePlasticProductCommandHandler : IRequestHandler<CreatePlasticP
         var url = _urlHelper.GenerateResourceUrl("MaterialDefinitions");
         await _restClient.PostAsync(url, materialDefinition);
 
-        var operation = new CreateOperationDto();
+        var operation = new CreateOperationDto(request.PlasticProductId);
         var operationUrl = _urlHelper.GenerateResourceUrl($"MaterialDefinitions/{request.PlasticProductId}/operations");
         await _restClient.PostAsync(operationUrl, operation);
 
