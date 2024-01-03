@@ -2,7 +2,6 @@
 using InjectionMachineModule.Application.Queries;
 using InjectionMachineModule.Application.Queries.PlasticMaterials;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.CompilerServices;
 
 namespace InjectionMachineModule.Controllers;
 [Route("api/[controller]")]
@@ -28,5 +27,15 @@ public class PlasticMaterialsController : ControllerBase
     public async Task<QueryResult<PlasticMaterialViewModel>> GetPlasticMaterials([FromQuery]PlasticMaterialsQuery query)
     {
         return await _mediator.Send(query);
+    }
+
+    [HttpDelete]
+    [Route("{plasticMaterialId}")]
+    public async Task<IActionResult> DeletePlasticMaterial([FromRoute] string plasticMaterialId)
+    {
+        var command = new DeletePlasticMaterialCommand(plasticMaterialId);
+        await _mediator.Send(command);
+
+        return Ok();
     }
 }

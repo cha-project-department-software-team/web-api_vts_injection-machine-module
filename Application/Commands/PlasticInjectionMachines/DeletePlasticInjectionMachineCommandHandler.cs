@@ -15,9 +15,6 @@ public class DeletePlasticInjectionMachineCommandHandler : IRequestHandler<Delet
 
     public async Task Handle(DeletePlasticInjectionMachineCommand request, CancellationToken cancellationToken)
     {
-        var deleteConnectionUrl = _urlHelper.GenerateResourceUrl($"ResourceRelationshipNetworks/MachineMoldRelationshipId/Connections?resourceId={request.EquipmentId}");
-        await _restClient.DeleteAsync(deleteConnectionUrl);
-
         var url = _urlHelper.GenerateResourceUrl($"Equipments/{request.EquipmentId}");
         await _restClient.DeleteAsync(url);
     }

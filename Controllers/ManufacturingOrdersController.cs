@@ -30,6 +30,16 @@ public class ManufacturingOrdersController : ControllerBase
         return await _mediator.Send(query);
     }
 
+    [HttpDelete]
+    [Route("{manufacturingOrderId}")]
+    public async Task<IActionResult> DeleteManufacturingOrder([FromRoute] string manufacturingOrderId)
+    {
+        var command = new DeleteManufacturingOrderCommand(manufacturingOrderId);
+        await _mediator.Send(command);
+
+        return Ok();
+    }
+
     [HttpPost]
     [Route("workorders/schedule")]
     public async Task<IActionResult> ScheduleWorkOrder(ScheduleWorkOrdersCommand command)

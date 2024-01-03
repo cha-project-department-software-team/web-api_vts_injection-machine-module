@@ -28,4 +28,14 @@ public class MoldsController : ControllerBase
     {
         return await _mediator.Send(query);
     }
+
+    [HttpDelete]
+    [Route("{moldId}")]
+    public async Task<IActionResult> DeleteMold([FromRoute] string moldId)
+    {
+        var command = new DeleteMoldCommand(moldId);
+        await _mediator.Send(command);
+
+        return Ok();
+    }
 }
