@@ -15,7 +15,7 @@ public class CreateManufacturingOrderCommandHandler : IRequestHandler<CreateManu
 
     public async Task Handle(CreateManufacturingOrderCommand request, CancellationToken cancellationToken)
     {
-        var manufacturingOrder = new CreateManufacturingOrderDto(request.ManufacturingOrderId, request.MaterialDefinitionId, request.Quantity, request.Unit, request.DueDate);
+        var manufacturingOrder = new CreateManufacturingOrderDto(request.ManufacturingOrderId, request.MaterialDefinitionId, request.Quantity, request.Unit, request.DueDate, request.AvailableDate, request.Priority);
         var url = _urlHelper.GenerateResourceUrl("ManufacturingOrders");
         await _restClient.PostAsync(url, manufacturingOrder);
     }
