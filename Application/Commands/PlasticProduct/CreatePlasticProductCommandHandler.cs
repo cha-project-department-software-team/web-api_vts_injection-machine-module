@@ -28,7 +28,7 @@ public class CreatePlasticProductCommandHandler : IRequestHandler<CreatePlasticP
         var url = _urlHelper.GenerateResourceUrl("MaterialDefinitions");
         await _restClient.PostAsync(url, materialDefinition);
 
-        var operation = new CreateOperationDto(request.PlasticProductId);
+        var operation = new CreateOperationDto();
         var operationUrl = _urlHelper.GenerateResourceUrl($"MaterialDefinitions/{request.PlasticProductId}/operations");
         await _restClient.PostAsync(operationUrl, operation);
 
@@ -36,7 +36,7 @@ public class CreatePlasticProductCommandHandler : IRequestHandler<CreatePlasticP
         {
             var connection = new SaveResourceNetworkConnectionDto(
                 Guid.NewGuid().ToString(),
-                $"{request.PlasticProductId} is formed from {moldId}",
+                $"{request.PlasticProductId} is formed with {moldId}",
                 request.PlasticProductId,
                 moldId);
 

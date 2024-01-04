@@ -25,14 +25,14 @@ public class CreateMoldCommandHandler : IRequestHandler<CreateMoldCommand>
 
         properties.Add(new PropertyDto("Cycle", "InjectionCycle", request.CycleBySecond.ToString(), EValueType.Decimal, "Second"));
 
-        var equipment = new CreateEquipmentDto(request.MoldId, request.Name, properties, request.WorkUnit, "MOLD");
+        var equipment = new CreateEquipmentDto(request.MoldId, request.Name, properties, request.WorkUnit, "Mold");
         var url = _urlHelper.GenerateResourceUrl("Equipments");
         await _restClient.PostAsync(url, equipment);
 
         foreach (var machineId in request.PlasticInjectionMachines)
         {
             var connection = new SaveResourceNetworkConnectionDto(
-                Guid.NewGuid().ToString(),
+                $"{machineId} - {request.MoldId}",
                 $"Relationship between {machineId} and {request.MoldId}",
                 machineId,
                 request.MoldId);
