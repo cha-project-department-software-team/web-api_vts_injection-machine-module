@@ -1,4 +1,6 @@
-﻿namespace InjectionMachineModule.Domain.Models;
+﻿using Microsoft.VisualBasic;
+
+namespace InjectionMachineModule.Domain.Models;
 
 public class WorkOrder
 {
@@ -14,6 +16,7 @@ public class WorkOrder
     public DateTime DueTime { get; set; }
     public DateTime? StartTime { get; set; }
     public DateTime? EndTime { get; set; }
+    public TimeSpan? Lateness => (EndTime!.Value - DueTime) < TimeSpan.Zero ? TimeSpan.Zero : EndTime!.Value - DueTime;
 
     public WorkOrder(string id, double priority, double quantity, List<Mold> availableMolds, Mold? mold, List<MoldingMachine> availableMachines, MoldingMachine? moldingMachine, DateTime availableTime, DateTime dueTime, DateTime? startTime, DateTime? endTime)
     {

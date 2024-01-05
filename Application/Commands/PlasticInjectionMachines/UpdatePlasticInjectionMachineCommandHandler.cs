@@ -16,13 +16,13 @@ public class UpdatePlasticInjectionMachineCommandHandler : IRequestHandler<Updat
 
     public async Task Handle(UpdatePlasticInjectionMachineCommand request, CancellationToken cancellationToken)
     {
-        var properties = request.Properties.Select(x => new PropertyDto(
+        var properties = request.Properties.ConvertAll(x => new PropertyDto(
             x.PropertyId,
             new PropertyType(x.PropertyId).Description,
             x.ValueString,
             new PropertyType(x.PropertyId).ValueType,
             x.ValueUnitOfMeasure))
-            .ToList();
+;
 
         var equipment = new UpdateEquipmentDto(request.Name, properties, request.WorkUnit, "IM");
 

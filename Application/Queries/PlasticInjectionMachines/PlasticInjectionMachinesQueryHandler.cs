@@ -22,7 +22,9 @@ public class PlasticInjectionMachinesQueryHandler : IRequestHandler<PlasticInjec
         var viewModel = await _restClient.GetAsync<QueryResult<EquipmentViewModelDto>>(url);
 
         if (viewModel is null)
-            throw new HttpRequestException("Resourcce not found");
+        {
+            throw new HttpRequestException("Resource not found");
+        }
         else
         {
             var items = viewModel.Items;

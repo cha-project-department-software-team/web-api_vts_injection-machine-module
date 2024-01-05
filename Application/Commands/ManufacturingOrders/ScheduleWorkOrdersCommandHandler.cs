@@ -13,8 +13,8 @@ public class ScheduleWorkOrdersCommandHandler : IRequestHandler<ScheduleWorkOrde
     private readonly RestClient _restClient;
     private readonly MesApiUrlHelper _urlHelper;
 
-    private readonly List<Mold> molds = new List<Mold>();
-    private readonly List<MoldingMachine> moldingMachines = new List<MoldingMachine>();
+    private readonly List<Mold> molds = new();
+    private readonly List<MoldingMachine> moldingMachines = new();
 
     public ScheduleWorkOrdersCommandHandler(RestClient restClient, MesApiUrlHelper urlHelper)
     {
@@ -25,35 +25,35 @@ public class ScheduleWorkOrdersCommandHandler : IRequestHandler<ScheduleWorkOrde
     public async Task<IEnumerable<WorkOrderDto>> Handle(ScheduleWorkOrdersCommand request, CancellationToken cancellationToken)
     {
         var orders = new List<WorkOrder>();
-        var availbleTime = DateTime.Now;
 
         for (int i = 0; i < request.OrderIds.Count; i++)
         {
             var workOrderDto = await GetWorkOrderAsync(request.OrderIds[i]);
             var manufacturingOrder = await GetManufacturingOrderAsync(request.OrderIds[i]);
-            var availableMolds = await GetAvailableMoldsForWorkOrder(request.OrderIds[i], manufacturingOrder);
+            var availableMolds = await GetAvailableMoldsForWorkOrder(manufacturingOrder);
             var moldMoldingMachines = availableMolds
                 .Select(async x => await GetMoldMoldingMachines(x))
                 .SelectMany(x => x.Result);
 
             var workOrder = new WorkOrder(workOrderDto.WorkOrderId,
-                                          i,
+                                          manufacturingOrder.Priority,
                                           (double) manufacturingOrder.Quantity,
                                           availableMolds,
                                           null,
                                           moldMoldingMachines.ToList(),
                                           null,
-                                          availbleTime,
+                                          manufacturingOrder.AvailableDate,
                                           workOrderDto.DueDate,
                                           null,
                                           null);
             orders.Add(workOrder);
         }
 
-        var scheduleResult = MoldingMachineScheduling.ScheduleWorkOrders(orders, moldingMachines);
+        var scheduleResult = MoldingMachineScheduling.ScheduleWorkOrders(orders, moldingMachines, request.SchedulingStrategy);
 
         var workOrders = scheduleResult.WorkOrders;
-        var viewModels = workOrders.Select(x => new WorkOrderDto(
+
+        return workOrders.Select(x => new WorkOrderDto(
             request.OrderIds.First(o => o.WorkOrderId == x.Id).ManufacturingOrderId,
             x.Id,
             x.DueTime,
@@ -66,19 +66,16 @@ public class ScheduleWorkOrdersCommandHandler : IRequestHandler<ScheduleWorkOrde
             x.MoldingMachine!.WorkCenter,
             EWorkOrderStatus.Draft
             ));
-        return viewModels;
     }
 
     public async Task<WorkOrderDto> GetWorkOrderAsync(WorkOrderIdentityViewModel orderId)
     {
         var url = _urlHelper.GenerateResourceUrl($"workOrders/{orderId.ManufacturingOrderId}/{orderId.WorkOrderId}");
         var workOrder = await _restClient.GetAsync<WorkOrderDto>(url);
-        return workOrder is null
-            ? throw new Exception($"No work order with id {orderId.ManufacturingOrderId}.{orderId.WorkOrderId}")
-            : workOrder;
+        return workOrder ?? throw new Exception($"No work order with id {orderId.ManufacturingOrderId}.{orderId.WorkOrderId}");
     }
 
-    public async Task<List<Mold>> GetAvailableMoldsForWorkOrder(WorkOrderIdentityViewModel orderId, ManufacturingOrderDto manufacturingOrder)
+    public async Task<List<Mold>> GetAvailableMoldsForWorkOrder(ManufacturingOrderDto manufacturingOrder)
     {
         var productMoldConnectionQueryResult = await _restClient.GetAsync<QueryResult<ResourceConnectionDto>>(_urlHelper.GenerateResourceUrl($"resourceRelationshipNetworks/PlasticProductMoldRelationshipId/Connections?FromResourceId={manufacturingOrder.MaterialDefinition.MaterialDefinitionId}"));
 
@@ -111,9 +108,7 @@ public class ScheduleWorkOrdersCommandHandler : IRequestHandler<ScheduleWorkOrde
     public async Task<ManufacturingOrderDto> GetManufacturingOrderAsync(WorkOrderIdentityViewModel orderId)
     {
         var manufacturingOrder = await _restClient.GetAsync<ManufacturingOrderDto>(_urlHelper.GenerateResourceUrl($"manufacturingOrders/{orderId.ManufacturingOrderId}"));
-        return manufacturingOrder is null
-            ? throw new Exception($"No work order with id {orderId.ManufacturingOrderId}.{orderId.WorkOrderId}")
-            : manufacturingOrder;
+        return manufacturingOrder ?? throw new Exception($"No work order with id {orderId.ManufacturingOrderId}.{orderId.WorkOrderId}");
     }
 
     public async Task<List<MoldingMachine>> GetMoldMoldingMachines(Mold mold)

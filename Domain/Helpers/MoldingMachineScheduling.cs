@@ -4,11 +4,35 @@ namespace InjectionMachineModule.Domain.Helpers;
 
 public static class MoldingMachineScheduling
 {
-    public static MoldingMachineSchedulingResult ScheduleWorkOrders(List<WorkOrder> workOrders, List<MoldingMachine> moldingMachines)
+    public static MoldingMachineSchedulingResult ScheduleWorkOrders(List<WorkOrder> workOrders, List<MoldingMachine> moldingMachines, SchedulingStrategy schedulingStrategy)
+    {
+        if (schedulingStrategy.PriortizingStrategy == OrderPriortizingStrategy.TabuSearch)
+        {
+            var tabuSearchOptimizer = new TabuSearchOptimizer<WorkOrder>(workOrders.ToArray(), 30, 20, FitnessFunction, TabuSearchOptimizer<WorkOrder>.EOptimalType.Minimum, moldingMachines);
+
+            var scheduledOrders = tabuSearchOptimizer.Run();
+            return new MoldingMachineSchedulingResult(scheduledOrders.ToList());
+        }
+        else
+        {
+            workOrders = workOrders.OrderByDescending(x => x.Priority).ToList();
+            Console.WriteLine(FitnessFunction(workOrders.ToArray(), moldingMachines));
+            return ScheduleSortedWorkOrders(workOrders, moldingMachines);
+        }
+    }
+
+    private static double FitnessFunction(WorkOrder[] workOrders, object moldingMachinesObject)
+    {
+        var moldingMachines = (List<MoldingMachine>) moldingMachinesObject;
+        var result = ScheduleSortedWorkOrders(workOrders.ToList(), moldingMachines);
+        return result.WorkOrders.Sum(x => x.Lateness!.Value.TotalSeconds);
+    }
+
+    private static MoldingMachineSchedulingResult ScheduleSortedWorkOrders(List<WorkOrder> workOrders, List<MoldingMachine> moldingMachines)
     {
         var stationSchedules = moldingMachines
-            .Select(x => new MoldingMachineSchedule(x))
-            .ToList();
+            .ConvertAll(x => new MoldingMachineSchedule(x))
+;
 
         var moldSchedules = moldingMachines
             .SelectMany(x => x.PossibleMolds)
@@ -20,8 +44,7 @@ public static class MoldingMachineScheduling
         {
             MoldingMachineSchedule? bestMachineSchedule = null;
             MoldSchedule? bestMoldSchedule = null;
-            DateTime bestStartTime;
-            bestStartTime = DateTime.MaxValue;
+            DateTime bestStartTime = DateTime.MaxValue;
 
             foreach (var machine in workOrder.AvailableMachines)
             {
@@ -59,7 +82,7 @@ public static class MoldingMachineScheduling
         return new MoldingMachineSchedulingResult(workOrders);
     }
 
-    public static DateTime GetEarliestAvailableStartTime(WorkOrder workOrder, MoldingMachineSchedule stationSchedule, MoldSchedule moldSchedule)
+    private static DateTime GetEarliestAvailableStartTime(WorkOrder workOrder, MoldingMachineSchedule stationSchedule, MoldSchedule moldSchedule)
     {
         var moldWorkOrders = moldSchedule.WorkOrders;
         var machineWorkOrders = stationSchedule.WorkOrders;
