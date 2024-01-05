@@ -26,7 +26,7 @@ public class PlasticInjectionMachinesQueryHandler : IRequestHandler<PlasticInjec
         else
         {
             var items = viewModel.Items;
-            items = items.Where(x => x.EquipmentClass == "IM");
+            items = items.Where(x => x.EquipmentClass == "InjectionMoldingMachine");
             var plasticInjectionMachines = _mapper.Map<IEnumerable<PlasticInjectionMachineViewModel>>(items);
             int totalItems = plasticInjectionMachines.Count();
 

@@ -30,7 +30,7 @@ public class MoldsQueryHandler : IRequestHandler<MoldsQuery, QueryResult<MoldVie
         else
         {
             var items = viewModel.Items;
-            items = items.Where(x => x.EquipmentClass == "MOLD");
+            items = items.Where(x => x.EquipmentClass == "Mold");
             var molds = _mapper.Map<IEnumerable<MoldViewModel>>(items);
             int totalItems = molds.Count();
 
