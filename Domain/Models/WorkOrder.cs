@@ -1,9 +1,8 @@
-﻿using Microsoft.VisualBasic;
-
-namespace InjectionMachineModule.Domain.Models;
+﻿namespace InjectionMachineModule.Domain.Models;
 
 public class WorkOrder
 {
+    public string ManufacturingOrderId { get; set; }
     public string Id { get; set; }
     public double Priority { get; set; }
     public double Quantity { get; set; }
@@ -18,8 +17,9 @@ public class WorkOrder
     public DateTime? EndTime { get; set; }
     public TimeSpan? Lateness => (EndTime!.Value - DueTime) < TimeSpan.Zero ? TimeSpan.Zero : EndTime!.Value - DueTime;
 
-    public WorkOrder(string id, double priority, double quantity, List<Mold> availableMolds, Mold? mold, List<MoldingMachine> availableMachines, MoldingMachine? moldingMachine, DateTime availableTime, DateTime dueTime, DateTime? startTime, DateTime? endTime)
+    public WorkOrder(string manufacturingOrderId, string id, double priority, double quantity, List<Mold> availableMolds, Mold? mold, List<MoldingMachine> availableMachines, MoldingMachine? moldingMachine, DateTime availableTime, DateTime dueTime, DateTime? startTime, DateTime? endTime)
     {
+        ManufacturingOrderId = manufacturingOrderId;
         Id = id;
         Priority = priority;
         Quantity = quantity;

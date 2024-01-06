@@ -35,9 +35,10 @@ public class ScheduleWorkOrdersCommandHandler : IRequestHandler<ScheduleWorkOrde
                 .Select(async x => await GetMoldMoldingMachines(x))
                 .SelectMany(x => x.Result);
 
-            var workOrder = new WorkOrder(workOrderDto.WorkOrderId,
+            var workOrder = new WorkOrder(workOrderDto.ManufacturingOrder,
+                                          workOrderDto.WorkOrderId,
                                           manufacturingOrder.Priority,
-                                          (double) manufacturingOrder.Quantity,
+                                          (double)manufacturingOrder.Quantity,
                                           availableMolds,
                                           null,
                                           moldMoldingMachines.ToList(),
@@ -54,7 +55,7 @@ public class ScheduleWorkOrdersCommandHandler : IRequestHandler<ScheduleWorkOrde
         var workOrders = scheduleResult.WorkOrders;
 
         return workOrders.Select(x => new WorkOrderDto(
-            request.OrderIds.First(o => o.WorkOrderId == x.Id).ManufacturingOrderId,
+            x.ManufacturingOrderId,
             x.Id,
             x.DueTime,
             x.Duration!.Value,

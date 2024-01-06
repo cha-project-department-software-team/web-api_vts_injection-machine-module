@@ -1,6 +1,4 @@
 using InjectionMachineModule.Application.Helpers;
-using InjectionMachineModule.Application.Queries;
-using InjectionMachineModule.Infrastructure.Communication;
 using InjectionMachineModule.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
