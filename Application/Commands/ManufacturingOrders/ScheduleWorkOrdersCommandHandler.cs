@@ -45,7 +45,6 @@ public class ScheduleWorkOrdersCommandHandler : IRequestHandler<ScheduleWorkOrde
                                           null,
                                           manufacturingOrder.AvailableDate,
                                           workOrderDto.DueDate,
-                                          null,
                                           null);
             orders.Add(workOrder);
         }

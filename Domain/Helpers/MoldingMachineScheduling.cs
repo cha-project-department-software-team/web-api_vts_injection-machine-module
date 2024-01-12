@@ -72,7 +72,6 @@ public static class MoldingMachineScheduling
 
             workOrder.Mold = bestMoldSchedule!.Mold;
             workOrder.StartTime = bestStartTime;
-            workOrder.EndTime = workOrder.StartTime.Value.Add(workOrder.Duration!.Value);
             workOrder.MoldingMachine = bestMachineSchedule!.MoldingMachine;
 
             bestMachineSchedule!.WorkOrders.Add(workOrder);

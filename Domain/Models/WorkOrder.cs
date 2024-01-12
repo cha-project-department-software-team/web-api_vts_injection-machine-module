@@ -14,10 +14,31 @@ public class WorkOrder
     public DateTime AvailableTime { get; set; }
     public DateTime DueTime { get; set; }
     public DateTime? StartTime { get; set; }
-    public DateTime? EndTime { get; set; }
+    public DateTime? EndTime
+    {
+        get
+        {
+            if (StartTime is null)
+            {
+                return null;
+            }
+            var endTime = StartTime.Value.Add(Duration!.Value);
+            var startTime = StartTime.Value;
+
+            DateTime closestSunday = startTime.Date.AddDays(DayOfWeek.Sunday - startTime.DayOfWeek).Date;
+
+            while (endTime > closestSunday)
+            {
+                endTime = endTime.AddDays(1);
+                closestSunday = closestSunday.AddDays(7);
+            }
+
+            return endTime;
+        }
+    }
     public TimeSpan? Lateness => (EndTime!.Value - DueTime) < TimeSpan.Zero ? TimeSpan.Zero : EndTime!.Value - DueTime;
 
-    public WorkOrder(string manufacturingOrderId, string id, double priority, double quantity, List<Mold> availableMolds, Mold? mold, List<MoldingMachine> availableMachines, MoldingMachine? moldingMachine, DateTime availableTime, DateTime dueTime, DateTime? startTime, DateTime? endTime)
+    public WorkOrder(string manufacturingOrderId, string id, double priority, double quantity, List<Mold> availableMolds, Mold? mold, List<MoldingMachine> availableMachines, MoldingMachine? moldingMachine, DateTime availableTime, DateTime dueTime, DateTime? startTime)
     {
         ManufacturingOrderId = manufacturingOrderId;
         Id = id;
@@ -30,7 +51,6 @@ public class WorkOrder
         AvailableTime = availableTime;
         DueTime = dueTime;
         StartTime = startTime;
-        EndTime = endTime;
     }
 
     public static bool CheckConflict(DateTime startTime1, DateTime endTime1, DateTime startTime2, DateTime endTime2)
