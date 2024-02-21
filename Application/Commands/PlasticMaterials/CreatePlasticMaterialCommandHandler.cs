@@ -23,7 +23,7 @@ public class CreatePlasticMaterialCommandHandler : IRequestHandler<CreatePlastic
             x.ValueUnitOfMeasure))
             .ToList();
 
-        var materialDefinition = new CreateMaterialDefinitionDto(request.PlasticMaterialId, request.Name, request.PrimaryUnit, request.ModuleType, properties);
+        var materialDefinition = new CreateMaterialDefinitionDto(request.PlasticMaterialId, request.Name, request.PrimaryUnit, properties, "InjectionMachine-PlasticMaterial");
         var url = _urlHelper.GenerateResourceUrl("MaterialDefinitions");
         await _restClient.PostAsync(url, materialDefinition);
     }

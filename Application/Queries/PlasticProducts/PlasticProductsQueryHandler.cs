@@ -26,7 +26,7 @@ public class PlasticProductsQueryHandler : IRequestHandler<PlasticProductsQuery,
         else
         {
             var items = viewModel.Items;
-            items = items.Where(x => x.ModuleType == "InjectionMachine-PlasticProduct");
+            items = items.Where(x => x.MaterialClass == "InjectionMachine-PlasticProduct");
             var plasticProducts = _mapper.Map<IEnumerable<PlasticProductViewModel>>(items);
             int totalItems = plasticProducts.Count();
 

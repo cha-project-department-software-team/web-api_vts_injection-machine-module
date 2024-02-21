@@ -27,7 +27,7 @@ public class PlasticInjectionMachinesController : ControllerBase
     [Route("{equipmentId}")]
     public async Task<IActionResult> UpdatePlasticInjectionMachine([FromRoute]string equipmentId, [FromBody]UpdatePlasticInjectionMachineViewModel equipment)
     {
-        var command = new UpdatePlasticInjectionMachineCommand(equipmentId, equipment.Name, equipment.Properties, equipment.Molds, equipment.WorkUnit);
+        var command = new UpdatePlasticInjectionMachineCommand(equipmentId, equipment.Name, equipment.Properties, equipment.Molds, equipment.AbsolutePath);
         await _mediator.Send(command);
 
         return Ok();

@@ -6,14 +6,14 @@ public class UpdatePlasticInjectionMachineCommand : IRequest
     public string Name { get; set; }
     public List<SavePropertyViewModel> Properties { get; set; }
     public List<string> Molds { get; set; }
-    public string WorkUnit { get; set; }
+    public string AbsolutePath { get; set; }
 
-    public UpdatePlasticInjectionMachineCommand(string equipmentId, string name, List<SavePropertyViewModel> properties, List<string> molds, string workUnit)
+    public UpdatePlasticInjectionMachineCommand(string equipmentId, string name, List<SavePropertyViewModel> properties, List<string> molds, string absolutePath)
     {
         EquipmentId = equipmentId;
         Name = name;
         Properties = properties;
         Molds = molds;
-        WorkUnit = workUnit;
+        AbsolutePath = absolutePath;
     }
 }

@@ -11,13 +11,13 @@ public class UpdatePlasticInjectionMachineViewModel
     [DataMember]
     public List<string> Molds { get; set; }
     [DataMember]
-    public string WorkUnit { get; set; }
+    public string AbsolutePath { get; set; }
 
-    public UpdatePlasticInjectionMachineViewModel(string name, List<SavePropertyViewModel> properties, List<string> molds, string workUnit)
+    public UpdatePlasticInjectionMachineViewModel(string name, List<SavePropertyViewModel> properties, List<string> molds, string absolutePath)
     {
         Name = name;
         Properties = properties;
         Molds = molds;
-        WorkUnit = workUnit;
+        AbsolutePath = absolutePath;
     }
 }

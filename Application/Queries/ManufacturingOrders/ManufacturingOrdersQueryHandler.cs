@@ -26,7 +26,7 @@ public class ManufacturingOrdersQueryHandler : IRequestHandler<ManufacturingOrde
         else
         {
             var items = viewModel.Items;
-            items = items.Where(x => x.MaterialDefinition.ModuleType == "InjectionMachine-PlasticProduct");
+            items = items.Where(x => x.MaterialDefinition.MaterialClass == "InjectionMachine-PlasticProduct");
             var manufacturingOrders = _mapper.Map<IEnumerable<ManufacturingOrderViewModel>>(items);
             int totalItems = manufacturingOrders.Count();
 

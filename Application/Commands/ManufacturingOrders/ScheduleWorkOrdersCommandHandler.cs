@@ -128,8 +128,13 @@ public class ScheduleWorkOrdersCommandHandler : IRequestHandler<ScheduleWorkOrde
             else
             {
                 var moldEquipment = await _restClient.GetAsync<EquipmentViewModelDto>(_urlHelper.GenerateResourceUrl($"equipments/{machineId}"));
-                var workUnit = moldEquipment!.WorkUnit;
-                var workCenter = string.Join("/",workUnit.Split("/").SkipLast(1));
+                var absolutePath = moldEquipment!.AbsolutePath;
+                var hierarchyModelIds = absolutePath.Split('/');
+                string workCenter = string.Empty;
+                if (hierarchyModelIds.Length >= 4)
+                {
+                    workCenter = hierarchyModelIds[3];
+                }
 
                 moldingMachine = new MoldingMachine(machineId, new List<Mold>(), TimeSpan.FromMinutes(30), workCenter);
                 moldingMachines.Add(moldingMachine);

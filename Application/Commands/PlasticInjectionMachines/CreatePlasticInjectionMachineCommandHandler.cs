@@ -24,7 +24,7 @@ public class CreatePlasticInjectionMachineCommandHandler : IRequestHandler<Creat
             x.ValueUnitOfMeasure))
             .ToList();
 
-        var equipment = new CreateEquipmentDto(request.EquipmentId, request.Name, properties, request.WorkUnit, "InjectionMoldingMachine");
+        var equipment = new CreateEquipmentDto(request.EquipmentId, request.Name, properties, "InjectionMoldingMachine", request.AbsolutePath);
 
         var url = _urlHelper.GenerateResourceUrl("Equipments");
         await _restClient.PostAsync(url, equipment);

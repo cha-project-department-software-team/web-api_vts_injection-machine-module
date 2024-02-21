@@ -6,7 +6,7 @@ public class MesApiUrlHelper
 
     public MesApiUrlHelper()
     {
-        _serverUrl = "https://mesmicroserviceapi20231201103615.azurewebsites.net/api/";
+        _serverUrl = "https://mesmicroserviceapiservice.azurewebsites.net/api/";
     }
 
     public string GenerateResourceUrl(string resource)

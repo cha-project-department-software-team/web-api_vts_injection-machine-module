@@ -14,14 +14,14 @@ public class CreatePlasticInjectionMachineCommand : IRequest
     [DataMember]
     public List<string> Molds { get; set; }
     [DataMember]
-    public string WorkUnit { get; set; }
+    public string AbsolutePath { get; set; }
 
-    public CreatePlasticInjectionMachineCommand(string equipmentId, string name, List<SavePropertyViewModel> properties, List<string> molds, string workUnit)
+    public CreatePlasticInjectionMachineCommand(string equipmentId, string name, List<SavePropertyViewModel> properties, List<string> molds, string absolutePath)
     {
         EquipmentId = equipmentId;
         Name = name;
         Properties = properties;
         Molds = molds;
-        WorkUnit = workUnit;
+        AbsolutePath = absolutePath;
     }
 }

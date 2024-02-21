@@ -24,7 +24,7 @@ public class UpdatePlasticInjectionMachineCommandHandler : IRequestHandler<Updat
             x.ValueUnitOfMeasure))
 ;
 
-        var equipment = new UpdateEquipmentDto(request.Name, properties, request.WorkUnit, "IM");
+        var equipment = new UpdateEquipmentDto(request.Name, properties, "InjectionMoldingMachine", request.AbsolutePath);
 
         var url = _urlHelper.GenerateResourceUrl($"Equipments/{request.EquipmentId}");
         await _restClient.PutAsync(url, equipment);
